@@ -1,14 +1,19 @@
-async function addItem(data, client) {
-  if (!data.itemId) {
-    return { status: "fail" };
-  }
+async function addItem(itemData) {
+  const endpoint = `${window.config.api}/add_item`;
 
-  const res = await client.json.SET(`item:${data.itemId}`, "$", data);
+  const options = {
+    method: "POST",
+    body: JSON.stringify(itemData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
-  if (res === "OK") {
-    return { status: "success" };
-  }
+  const status = await fetch(endpoint, options)
+    .then((res) => res.json())
+    .then((res) => res.status);
 
-  return { status: "fail" };
+  return status;
 }
+
 export default addItem;
