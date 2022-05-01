@@ -1,6 +1,6 @@
-# ReactJS Web-Shop
+# ReactJS Web-Shop (WIP)
 
-This is a little web shop written with React. This is mostly a Project to learn ReactJS and web dev
+This is a little web shop written with React. This is mostly a Project to learn ReactJS and web dev.
 
 # Setup
 
