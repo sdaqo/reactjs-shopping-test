@@ -37,7 +37,7 @@ class Products extends Component {
           className={`row row-cols-1 g-4 mt-2 me-0 card-group ${this.state.extraClass}`}
         >
           {!this.props.itemData ? "" : this.dataItemGen()}
-          <button className="btn"> hello</button>
+          
         </div>
       </>
     );

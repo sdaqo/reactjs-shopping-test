@@ -8,10 +8,10 @@ class ShoppingCart extends Component {
     return (
       <>
         <div className="row row-cols-1 g-4 mt-2 ms-4 me-0">
-          {items.map((item) => (
+          {items.map((id) => (
             <CartItem
-              key={item.itemId}
-              item={item}
+              key={id}
+              itemId={id}
               onDel={onDel}
               onInc={onInc}
               onDec={onDec}

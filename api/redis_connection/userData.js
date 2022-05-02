@@ -2,7 +2,7 @@ async function userData(data, client) {
   const { email, session } = data;
 
   const sessionIdFromDB = await client.HGET(`userKey:${email}`, "session");
-  console.log(session, sessionIdFromDB);
+
   if (sessionIdFromDB !== session) {
     return { status: "fail", reason: "session missmatch" };
   }

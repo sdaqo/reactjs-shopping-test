@@ -154,16 +154,20 @@ class App extends Component {
   };
 
   handleLogIn = (usrData, usrEmail, usrPwdHash, session) => {
-    console.log(usrData);
     Cookies.set("session", session, { expires: 7, path: "/" });
     Cookies.set("email", usrEmail, { expires: 7, path: "/" });
-    this.setState({ loggedIn: true, itemsInCart: JSON.parse(usrData) });
+
+    this.setState({ loggedIn: true, itemsInCart: usrData });
   };
 
   addUserItemsToDB(data) {
     if (!this.state.loggedIn) {
       return null;
     }
+    let idArry = [];
+    data.forEach((item) => {
+      idArry.push(item.itemId);
+    });
     const session = Cookies.get("session");
     const email = Cookies.get("email");
     if (session && email) {
@@ -172,7 +176,7 @@ class App extends Component {
         body: JSON.stringify({
           session: session,
           email: email,
-          data: data,
+          data: idArry,
         }),
         headers: {
           "Content-Type": "application/json",
