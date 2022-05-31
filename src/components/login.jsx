@@ -88,9 +88,6 @@ class Login extends Component {
     }
   };
 
-  email = "";
-  pwdHash = "";
-
   handelSubmitEvent = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
