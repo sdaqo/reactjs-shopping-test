@@ -42,6 +42,7 @@ class App extends Component {
           }
         });
     }
+
     await fetch(`${window.config.api}/data?type=item&id=all`)
       .then((res) => res.json())
       .then((data) =>
@@ -95,8 +96,11 @@ class App extends Component {
 
   updateTotal(items) {
     let total = 0.0;
-    items.forEach((item) => {
-      const float = parseFloat(item.itemPrice) * item.quantity;
+    items.forEach((item_from_cart) => {
+      const item = this.state.items.find(
+        (item) => item.itemId === item_from_cart.itemId
+      );
+      const float = parseFloat(item.itemPrice) * item_from_cart.qty;
       total += parseFloat(float.toFixed(1));
     });
 
@@ -118,8 +122,7 @@ class App extends Component {
       return null;
     }
 
-    item.quantity = 1;
-    items.push(item);
+    items.push({ itemId: item.itemId, qty: 1 });
     this.props.alert.success(`Added ${item.itemTitle} to the Shopping Cart`);
     this.addUserItemsToDB(items);
     this.setState({ itemsInCart: items, total: this.updateTotal(items) });
@@ -127,20 +130,24 @@ class App extends Component {
 
   handleInc = (item) => {
     const items = [...this.state.itemsInCart];
-    const index = items.indexOf(item);
+    const index = items.findIndex(
+      (cart_item) => item.itemId == cart_item.itemId
+    );
 
-    items[index].quantity++;
+    items[index].qty++;
     this.addUserItemsToDB(items);
     this.setState({ itemsInCart: items, total: this.updateTotal(items) });
   };
 
   handleDec = (item) => {
     const items = [...this.state.itemsInCart];
-    const index = items.indexOf(item);
+    const index = items.findIndex(
+      (cart_item) => item.itemId == cart_item.itemId
+    );
 
-    if (items[index].quantity < 2) return null;
+    if (items[index].qty < 2) return null;
 
-    items[index].quantity--;
+    items[index].qty--;
     this.addUserItemsToDB(items);
     this.setState({ itemsInCart: items, total: this.updateTotal(items) });
   };
@@ -156,7 +163,7 @@ class App extends Component {
   handleLogIn = (usrData, usrEmail, usrPwdHash, session) => {
     Cookies.set("session", session, { expires: 7, path: "/" });
     Cookies.set("email", usrEmail, { expires: 7, path: "/" });
-
+    usrData = JSON.parse(usrData);
     this.setState({ loggedIn: true, itemsInCart: usrData });
   };
 
@@ -164,9 +171,9 @@ class App extends Component {
     if (!this.state.loggedIn) {
       return null;
     }
-    let idArry = [];
+    let itemArry = [];
     data.forEach((item) => {
-      idArry.push(item.itemId);
+      itemArry.push({ itemId: item.itemId, qty: item.qty });
     });
     const session = Cookies.get("session");
     const email = Cookies.get("email");
@@ -176,7 +183,7 @@ class App extends Component {
         body: JSON.stringify({
           session: session,
           email: email,
-          data: idArry,
+          data: itemArry,
         }),
         headers: {
           "Content-Type": "application/json",

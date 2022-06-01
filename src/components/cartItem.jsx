@@ -9,12 +9,14 @@ class CartItem extends Component {
     await fetch(`${window.config.api}/data?type=item&id=${this.props.itemId}`)
       .then((res) => res.json())
       .then((json) => {
+        json.data.quantity = this.props.qty;
         this.setState({ item: json.data });
       });
   }
 
   render() {
-    const { onDel, onInc, onDec } = this.props;
+    const { onDel, onInc, onDec, qty } = this.props;
+    console.log(qty);
     return (
       <div className="col rounded" style={{ width: "19rem" }}>
         <div className="card h-100 bg-dark text-white shadow border-primary border-1 rounded text-white">
@@ -27,9 +29,7 @@ class CartItem extends Component {
           <div className="card-body">
             <h5 className="card-title">
               {this.state.item.itemTitle}
-              <span className="badge bg-primary m-2">
-                {this.state.item.quantity}
-              </span>
+              <span className="badge bg-primary m-2">{qty}</span>
             </h5>
             <p className="card-text">{this.state.item.itemDesc}</p>
           </div>

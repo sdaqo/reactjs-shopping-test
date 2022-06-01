@@ -8,15 +8,18 @@ class ShoppingCart extends Component {
     return (
       <>
         <div className="row row-cols-1 g-4 mt-2 ms-4 me-0">
-          {items.map((id) => (
-            <CartItem
-              key={id}
-              itemId={id}
-              onDel={onDel}
-              onInc={onInc}
-              onDec={onDec}
-            />
-          ))}
+          {items.length !== 0
+            ? items.map((item) => (
+                <CartItem
+                  key={item.id}
+                  itemId={item.itemId}
+                  qty={item.qty}
+                  onDel={onDel}
+                  onInc={onInc}
+                  onDec={onDec}
+                />
+              ))
+            : ""}
         </div>
         <button className="btn btn-success position-fixed bottom-0 end-0 m-3 shadow">
           Check Out ({this.props.total}$)
